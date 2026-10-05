@@ -6,7 +6,7 @@ class Livro {
         this.Genero = Genero // Ação, Fantasia, Romance (Romantico) e etc
         this.GenTexto = GenTexto // Romance (novel), Poesia, Jornal e etc
         this.FaixaEtaria = FaixaEtaria // L, 10+, 12+, 14+, 16+, 18+, 21+
-        this.Estoque = Estoque
+        this.Estoque = Estoque // Numero de livros em estoque
     }
 
     function ModificarEstoque(Quantidade) {
