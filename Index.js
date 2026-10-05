@@ -10,31 +10,31 @@ class Livro {
     }
 
     ModificarEstoque(Quantidade) {
-        Livro.Estoque += Quantidade
+        this.Estoque += Quantidade
     }
 
     EditarLivroTitulo(TituloNovo) {
-        Livro.Titulo = TituloNovo
+        this.Titulo = TituloNovo
     }
 
     EditarLivroAutor(AutorNovo) {
-        Livro.Autor = AutorNovo
+        this.Autor = AutorNovo
     }
 
     EditarLivroLancamento(LancamentoNovo) {
-        Livro.Lancamento = LancamentoNovo
+        this.Lancamento = LancamentoNovo
     }
 
     EditarLivroGenero(GeneroNovo) {
-        Livro.Genero = GeneroNovo
+        this.Genero = GeneroNovo
     }
 
     EditarLivroGenTexto(GenTextoNovo) {
-        Livro.GenTexto = GenTextoNovo
+        this.GenTexto = GenTextoNovo
     }
 
     EditarLivroFaixaEtaria(FaixaEtariaNovo) {
-        Livro.FaixaEtaria = FaixaEtariaNovo
+        this.FaixaEtaria = FaixaEtariaNovo
     }
 
 }
