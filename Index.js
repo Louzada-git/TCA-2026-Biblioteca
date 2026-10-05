@@ -9,31 +9,31 @@ class Livro {
         this.Estoque = Estoque // Numero de livros em estoque
     }
 
-    function ModificarEstoque(Quantidade) {
+    ModificarEstoque(Quantidade) {
         Livro.Estoque += Quantidade
     }
 
-    function EditarLivroTitulo(TituloNovo) {
+    EditarLivroTitulo(TituloNovo) {
         Livro.Titulo = TituloNovo
     }
 
-    function EditarLivroAutor(AutorNovo) {
+    EditarLivroAutor(AutorNovo) {
         Livro.Autor = AutorNovo
     }
 
-    function EditarLivroLancamento(LancamentoNovo) {
+    EditarLivroLancamento(LancamentoNovo) {
         Livro.Lancamento = LancamentoNovo
     }
 
-    function EditarLivroGenero(GeneroNovo) {
+    EditarLivroGenero(GeneroNovo) {
         Livro.Genero = GeneroNovo
     }
 
-    function EditarLivroGenTexto(GenTextoNovo) {
+    EditarLivroGenTexto(GenTextoNovo) {
         Livro.GenTexto = GenTextoNovo
     }
 
-    function EditarLivroFaixaEtaria(FaixaEtariaNovo) {
+    EditarLivroFaixaEtaria(FaixaEtariaNovo) {
         Livro.FaixaEtaria = FaixaEtariaNovo
     }
 
