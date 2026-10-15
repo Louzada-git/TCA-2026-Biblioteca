@@ -1,3 +1,4 @@
+let Hoje = new Date();
 class Livro {
     constructor(Titulo, Autor, Lancamento, Genero, GenTexto, FaixaEtaria, Estoque) {
         this.Titulo = Titulo // Shadow Slave Vol.1
@@ -38,3 +39,31 @@ class Livro {
     }
 
 }
+
+
+
+class Usuario {
+  constructor(Nome, Dia, Mes, Ano) {
+    this.Nome = Nome;
+    this.Nascimento = new Date(Ano, Mes - 1, Dia);
+  }
+
+  get Idade() {
+    let Hoje = new Date();
+    let idade = Hoje.getFullYear() - this.Nascimento.getFullYear();
+
+    let jaFezAniversario =
+      Hoje.getMonth() > this.Nascimento.getMonth() ||
+      (Hoje.getMonth() === this.Nascimento.getMonth() &&
+        Hoje.getDate() >= this.Nascimento.getDate());
+
+    if (!jaFezAniversario) idade--;
+    return idade;
+  }
+
+  get Adulto() {
+    return this.Idade >= 18;
+  }
+}
+
+
