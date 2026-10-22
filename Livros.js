@@ -80,4 +80,14 @@ function SalvarLivros() {
     fs.writeFileSync("livros.json", JSON.stringify(Livros, null, 2))
 }
 
-export { Livro, Livros, SalvarLivros }
+// procura o livro pelo título, sem ligar para maiúsculas e minúsculas
+function BuscarLivro(Titulo) {
+    let i = 0
+    while (i < Livros.length) {
+        if (Livros[i].Titulo.toLowerCase() == Titulo.toLowerCase()) return Livros[i]
+        i++
+    }
+    return null
+}
+
+export { Livro, Livros, SalvarLivros, BuscarLivro }
