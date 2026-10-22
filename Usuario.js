@@ -23,7 +23,7 @@ class Usuario {
   Comprar(Titulo) {
     let i = 0;
     while (i < Livros.length) {
-      if (Livros[i].Titulo == Titulo && Livros[i].Estoque > 0 && this.Idade >= Livros[i].FaixaEtaria) {
+      if (Livros[i].Titulo == Titulo && Livros[i].Estoque > 0 && this.Idade >= ((this.Idade >= Livros[i].FaixaEtaria) || Livros[i].FaixaEtaria == "L")) {
         Livros[i].Estoque--;
         this.LivrosComprados.push(Livros[i]);
         break;
@@ -35,10 +35,10 @@ class Usuario {
   Alugar(Titulo, DiaEntrega, MesEntrega, AnoEntrega) {
     let i = 0;
     while (i < Livros.length) {
-      if (Livros[i].Titulo == Titulo && Livros[i].Estoque > 0 && this.Idade >= Livros[i].FaixaEtaria) {
+      if (Livros[i].Titulo == Titulo && Livros[i].Estoque > 0 && ((this.Idade >= Livros[i].FaixaEtaria) || Livros[i].FaixaEtaria == "L")) {
         Livros[i].Estoque--;
         this.LivrosAlugados.push({
-          Livro: Livros[i],
+          Livro: Livros[i].Titulo,
           Entrega: new Date(AnoEntrega, MesEntrega - 1, DiaEntrega)
         });
         break;

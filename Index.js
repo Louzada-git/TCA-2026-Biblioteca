@@ -16,11 +16,11 @@ function VerificarAlugueis(DiasAviso = 3) {
       let dias = Math.round((aluguel.Entrega - Hoje) / 86400000);
 
         if (dias < 0) {
-        console.log(`o ${Usuarios[i].Nome} está ${-dias} dia${-dias == 1 ? "" : "s"} atrasado para entregar o "${aluguel.Livro.Titulo}"`);
+        console.log(`o ${Usuarios[i].Nome} está ${-dias} dia${-dias == 1 ? "" : "s"} atrasado para entregar o "${aluguel.Livro}"`);
         } else if (dias == 0) {
-        console.log(`o ${Usuarios[i].Nome} deve entregar o "${aluguel.Livro.Titulo}" hoje`);
+        console.log(`o ${Usuarios[i].Nome} deve entregar o "${aluguel.Livro}" hoje`);
         } else if (dias <= DiasAviso) {
-        console.log(`faltam ${dias} dia${dias == 1 ? "" : "s"} para o ${Usuarios[i].Nome} entregar o "${aluguel.Livro.Titulo}"`);
+        console.log(`faltam ${dias} dia${dias == 1 ? "" : "s"} para o ${Usuarios[i].Nome} entregar o "${aluguel.Livro}"`);
         }
 
       j++;
@@ -31,3 +31,44 @@ function VerificarAlugueis(DiasAviso = 3) {
 }
 
 VerificarAlugueis()
+
+function CriarUsuario(Nome, Dia, Mes, Ano) {
+  let usuario = new Usuario(Nome, Dia, Mes, Ano);
+  Usuarios.push(usuario);
+  return usuario;
+}
+
+function CriarLivro(Titulo, Autor, Lancamento, Genero, GenTexto, FaixaEtaria, Estoque) {
+  let livro = new Livro(Titulo, Autor, Lancamento, Genero, GenTexto, FaixaEtaria, Estoque);
+  Livros.push(livro);
+  return livro;
+}
+
+function Devolver(Titulo, NomeUsuario) {
+  let i = 0;
+  while (i < Usuarios.length) {
+    if (Usuarios[i].Nome == NomeUsuario) {
+
+      let j = 0;
+      while (j < Usuarios[i].LivrosAlugados.length) {
+        if (Usuarios[i].LivrosAlugados[j].Livro == Titulo) {
+          Usuarios[i].LivrosAlugados.splice(j, 1);
+
+          let x = 0;
+          while (x < Livros.length) {
+            if (Livros[x].Titulo == Titulo) {
+              Livros[x].Estoque++;
+              break;
+            }
+            x++;
+          }
+
+          return;
+        }
+        j++;
+      }
+
+    }
+    i++;
+  }
+}
