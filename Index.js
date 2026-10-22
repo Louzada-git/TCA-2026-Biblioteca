@@ -1,6 +1,5 @@
-import { Livro, Livros } from "./Livros.js"
-import { Usuario, Usuarios } from "./Usuario.js"
-
+import { Livro, Livros, SalvarLivros } from "./Livros.js"
+import { Usuario, Usuarios, SalvarUsuarios } from "./Usuario.js"
 
 function VerificarAlugueis(DiasAviso = 3) {
   let Hoje = new Date();
@@ -13,7 +12,7 @@ function VerificarAlugueis(DiasAviso = 3) {
     let j = 0;
     while (j < Usuarios[i].LivrosAlugados.length) {
       let aluguel = Usuarios[i].LivrosAlugados[j];
-      let dias = Math.round((aluguel.Entrega - Hoje) / 86400000);
+      let dias = Math.floor((aluguel.Entrega - Hoje) / 86400000);
 
         if (dias < 0) {
         console.log(`o ${Usuarios[i].Nome} está ${-dias} dia${-dias == 1 ? "" : "s"} atrasado para entregar o "${aluguel.Livro}"`);
@@ -35,12 +34,14 @@ VerificarAlugueis()
 function CriarUsuario(Nome, Dia, Mes, Ano) {
   let usuario = new Usuario(Nome, Dia, Mes, Ano);
   Usuarios.push(usuario);
+  SalvarUsuarios();
   return usuario;
 }
 
 function CriarLivro(Titulo, Autor, Lancamento, Genero, GenTexto, FaixaEtaria, Estoque) {
   let livro = new Livro(Titulo, Autor, Lancamento, Genero, GenTexto, FaixaEtaria, Estoque);
   Livros.push(livro);
+  SalvarLivros();
   return livro;
 }
 
@@ -63,6 +64,8 @@ function Devolver(Titulo, NomeUsuario) {
             x++;
           }
 
+          SalvarLivros();
+          SalvarUsuarios();
           return;
         }
         j++;
