@@ -32,7 +32,6 @@ function VerificarAlugueis(DiasAviso = 3) {
 
 VerificarAlugueis()
 
-// procura o usuário pelo nome, sem ligar para maiúsculas e minúsculas
 function BuscarUsuario(Nome) {
   let i = 0;
   while (i < Usuarios.length) {
@@ -42,7 +41,7 @@ function BuscarUsuario(Nome) {
   return null;
 }
 
-// transforma "dd/mm/aaaa" em Date, ou devolve null se a data for inválida
+
 function LerData(Texto) {
   let partes = Texto.split("/");
   if (partes.length != 3) return null;
@@ -53,7 +52,7 @@ function LerData(Texto) {
   if (!Number.isInteger(dia) || !Number.isInteger(mes) || !Number.isInteger(ano)) return null;
 
   let data = new Date(ano, mes - 1, dia);
-  // o Date aceita 31/02 e vira 03/03, então confere se a data continua igual
+
   if (data.getDate() != dia || data.getMonth() != mes - 1 || data.getFullYear() != ano) return null;
 
   return data;
@@ -64,7 +63,7 @@ function CriarUsuario(Nome, Dia, Mes, Ano) {
 
   let usuario = new Usuario(Nome, Dia, Mes, Ano);
   if (usuario.Nascimento > new Date()) return "A data de nascimento não pode ser no futuro";
-
+  if (usuario.Nascimento < new Date() - new Date(145, 0, 0)) return "A idade maxima são 143 anos";
   Usuarios.push(usuario);
   SalvarUsuarios();
   return `Usuário ${Nome} criado`;
@@ -104,7 +103,6 @@ function Devolver(Titulo, NomeUsuario) {
 
 let rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
-// faz a pergunta e tira os espaços sobrando do começo e do fim
 async function Perguntar(Texto) {
   return (await rl.question(Texto)).trim();
 }
@@ -120,6 +118,7 @@ while (rodando) {
   console.log("5 - Devolver livro");
   console.log("6 - Adicionar usuário");
   console.log("7 - Adicionar livro");
+  console.log("8 - Editar livro");
   console.log("0 - Sair");
 
   let opcao = await Perguntar("Escolha: ");
@@ -129,7 +128,7 @@ while (rodando) {
 
     let i = 0;
     while (i < Livros.length) {
-      console.log(`${Livros[i].Titulo} - ${Livros[i].Autor} | ${Livros[i].FaixaEtaria} | estoque: ${Livros[i].Estoque}`);
+      console.log(`O ${Livros[i].GenTexto} ${Livros[i].Titulo} de ${Livros[i].Autor} para pessoas de ${Livros[i].FaixaEtaria == "L" ? "todos os" : Livros[i].FaixaEtaria} anos | estoque: ${Livros[i].Estoque} | De: ${Livros[i].Genero} | Lançado em ${Livros[i].Lancamento}`);
       i++;
     }
 
@@ -170,7 +169,7 @@ while (rodando) {
       console.log("Usuário não encontrado");
     } else {
       let titulo = await Perguntar("Título do livro: ");
-      let entrega = LerData(await Perguntar("Data de entrega (dd/mm/aaaa): "));
+      let entrega = LerData(await Perguntar("Entregar em quantos dias: "));
       if (entrega == null) {
         console.log("Data inválida, use o formato dd/mm/aaaa");
       } else {
@@ -217,11 +216,107 @@ while (rodando) {
       console.log(CriarLivro(titulo, autor, lancamento, genero, genTexto, faixa == "L" ? "L" : Number(faixa), Number(estoque)));
     }
 
+} else if (opcao == "8") {
+    let livro = BuscarLivro(await Perguntar("Qual livro? "));
+    if (livro == null) {
+      console.log("Livro não encontrado");
+    } else {
+      let campo = await Perguntar(`Editar o quê?
+  1 - Título
+  2 - Autor
+  3 - Lançamento
+  4 - Gênero
+  5 - Gênero textual
+  6 - Faixa etária
+  7 - Estoque
+  0 - Cancelar
+Escolha: `);
+
+      if (campo == "1") {
+        let novo = await Perguntar("Novo título: ");
+        if (novo == "") {
+          console.log("O título não pode ficar vazio");
+        } else if (BuscarLivro(novo) != null) {
+          console.log(`Já existe um livro chamado "${novo}"`);
+        } else {
+          livro.EditarLivroTitulo(novo);
+          SalvarLivros();
+          console.log("Título alterado");
+        }
+
+      } else if (campo == "2") {
+        let novo = await Perguntar("Novo autor: ");
+        if (novo == "") {
+          console.log("O autor não pode ficar vazio");
+        } else {
+          livro.EditarLivroAutor(novo);
+          SalvarLivros();
+          console.log("Autor alterado");
+        }
+
+      } else if (campo == "3") {
+        let novo = await Perguntar("Novo lançamento (dd/mm/aaaa): ");
+        if (LerData(novo) == null) {
+          console.log("Data de lançamento inválida, use o formato dd/mm/aaaa");
+        } else {
+          livro.EditarLivroLancamento(novo);
+          SalvarLivros();
+          console.log("Lançamento alterado");
+        }
+
+      } else if (campo == "4") {
+        let novo = await Perguntar("Novo gênero: ");
+        if (novo == "") {
+          console.log("O gênero não pode ficar vazio");
+        } else {
+          livro.EditarLivroGenero(novo);
+          SalvarLivros();
+          console.log("Gênero alterado");
+        }
+
+      } else if (campo == "5") {
+        let novo = await Perguntar("Novo gênero textual: ");
+        if (novo == "") {
+          console.log("O gênero textual não pode ficar vazio");
+        } else {
+          livro.EditarLivroGenTexto(novo);
+          SalvarLivros();
+          console.log("Gênero textual alterado");
+        }
+
+      } else if (campo == "6") {
+        let novo = (await Perguntar("Nova faixa etária (L, 10, 12, 14, 16, 18, 21): ")).toUpperCase().replace("+", "");
+        if (!["L", "10", "12", "14", "16", "18", "21"].includes(novo)) {
+          console.log("Faixa etária inválida, use L, 10, 12, 14, 16, 18 ou 21");
+        } else {
+          livro.EditarLivroFaixaEtaria(novo == "L" ? "L" : Number(novo));
+          SalvarLivros();
+          console.log("Faixa etária alterada");
+        }
+
+      } else if (campo == "7") {
+        let novo = await Perguntar("Novo estoque: ");
+        if (novo == "" || !Number.isInteger(Number(novo)) || Number(novo) < 0) {
+          console.log("O estoque precisa ser um número inteiro, 0 ou maior");
+        } else {
+          livro.ModificarEstoque(Number(novo) - livro.Estoque);
+          SalvarLivros();
+          console.log("Estoque alterado");
+        }
+
+      } else if (campo == "0") {
+        console.log("Cancelado");
+
+      } else {
+        console.log("Responda de 0 a 7");
+      }
+    }
+  
   } else if (opcao == "0") {
     rodando = false;
 
   } else {
-    console.log("Opção inválida, escolha um número de 0 a 7");
+    console.log("Opção inválida, escolha um número de 0 a 8");
   }
 }
 

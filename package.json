@@ -1,6 +1,21 @@
 {
-  "name": "biblioteca",
-  "version": "1.0.0",
   "type": "module",
-  "main": "Index.js"
+  "name": "tca-2026-biblioteca",
+  "version": "1.0.0",
+  "description": "TCA 2026: biblioteca desenvolve um sistema de gerenciamento para uma biblioteca",
+  "main": "Index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Louzada-git/TCA-2026-Biblioteca.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Louzada-git/TCA-2026-Biblioteca/issues"
+  },
+  "homepage": "https://github.com/Louzada-git/TCA-2026-Biblioteca#readme"
 }

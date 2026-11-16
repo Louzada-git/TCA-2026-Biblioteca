@@ -1,4 +1,5 @@
 import fs from "fs"
+import { Usuarios, SalvarUsuarios } from "./Usuario.js"
 
 class Livro {
     constructor(Titulo, Autor, Lancamento, Genero, GenTexto, FaixaEtaria, Estoque) {
@@ -13,37 +14,51 @@ class Livro {
 
     ModificarEstoque(Quantidade) {
         this.Estoque += Quantidade
-        SalvarLivros()
     }
 
     EditarLivroTitulo(TituloNovo) {
+        let Antigo = this.Titulo
         this.Titulo = TituloNovo
-        SalvarLivros()
+
+        let i = 0
+        while (i < Usuarios.length) {
+            let u = Usuarios[i]
+
+            let j = 0
+            while (j < u.LivrosComprados.length) {
+                if (u.LivrosComprados[j] == Antigo) u.LivrosComprados[j] = TituloNovo
+                j++
+            }
+
+            j = 0
+            while (j < u.LivrosAlugados.length) {
+                if (u.LivrosAlugados[j].Livro == Antigo) u.LivrosAlugados[j].Livro = TituloNovo
+                j++
+            }
+
+            i++
+        }
+        SalvarUsuarios()
     }
 
     EditarLivroAutor(AutorNovo) {
         this.Autor = AutorNovo
-        SalvarLivros()
     }
 
     EditarLivroLancamento(LancamentoNovo) {
         this.Lancamento = LancamentoNovo
-        SalvarLivros()
     }
 
     EditarLivroGenero(GeneroNovo) {
         this.Genero = GeneroNovo
-        SalvarLivros()
     }
 
     EditarLivroGenTexto(GenTextoNovo) {
         this.GenTexto = GenTextoNovo
-        SalvarLivros()
     }
 
     EditarLivroFaixaEtaria(FaixaEtariaNovo) {
         this.FaixaEtaria = FaixaEtariaNovo
-        SalvarLivros()
     }
 
 }
@@ -51,7 +66,6 @@ class Livro {
 let Livros = []
 
 if (fs.existsSync("livros.json")) {
-    // o JSON volta como objeto comum, sem os métodos, então recria cada livro com new Livro
     let dados = JSON.parse(fs.readFileSync("livros.json", "utf-8"))
     let i = 0
     while (i < dados.length) {
@@ -60,27 +74,24 @@ if (fs.existsSync("livros.json")) {
         i++
     }
 } else {
-    // lista padrão, usada só quando o livros.json ainda não existe
     Livros = [
-        new Livro("Shadow Slave Vol.1", "Guiltythree", "30/01/2001", "Fantasia sombria", "Romance", 16, 5),
-        new Livro("O Hobbit", "J.R.R. Tolkien", "21/09/1937", "Fantasia", "Romance", 10, 5),
-        new Livro("Harry Potter e a Pedra Filosofal", "J.K. Rowling", "26/06/1997", "Fantasia", "Romance", 10, 5),
-        new Livro("O Nome do Vento", "Patrick Rothfuss", "27/03/2007", "Fantasia", "Romance", 14, 4),
-        new Livro("Mistborn: O Império Final", "Brandon Sanderson", "17/07/2006", "Fantasia", "Romance", 14, 5),
-        new Livro("A Guerra dos Tronos", "George R.R. Martin", "01/08/1996", "Fantasia sombria", "Romance", 18, 4),
-        new Livro("1984", "George Orwell", "08/06/1949", "Distopia", "Romance", 14, 5),
-        new Livro("Drácula", "Bram Stoker", "26/05/1897", "Terror", "Romance", 16, 4),
-        new Livro("Frankenstein", "Mary Shelley", "01/01/1818", "Terror gótico", "Romance", 14, 5),
-        new Livro("O Iluminado", "Stephen King", "28/01/1977", "Terror", "Romance", 18, 4)
+    new Livro("Shadow Slave Vol.1", "Guiltythree", "30/01/2001", "Fantasia sombria", "Romance", 16, 5),
+    new Livro("O Hobbit", "J.R.R. Tolkien", "21/09/1937", "Fantasia", "Romance", 10, 5),
+    new Livro("Harry Potter e a Pedra Filosofal", "J.K. Rowling", "26/06/1997", "Fantasia", "Romance", 10, 5),
+    new Livro("O Nome do Vento", "Patrick Rothfuss", "27/03/2007", "Fantasia", "Romance", 14, 4),
+    new Livro("Mistborn: O Império Final", "Brandon Sanderson", "17/07/2006", "Fantasia", "Romance", 14, 5),
+    new Livro("A Guerra dos Tronos", "George R.R. Martin", "01/08/1996", "Fantasia sombria", "Romance", 18, 4),
+    new Livro("1984", "George Orwell", "08/06/1949", "Distopia", "Romance", 14, 5),
+    new Livro("Drácula", "Bram Stoker", "26/05/1897", "Terror", "Romance", 16, 4),
+    new Livro("Frankenstein", "Mary Shelley", "01/01/1818", "Terror gótico", "Romance", 14, 5),
+    new Livro("O Iluminado", "Stephen King", "28/01/1977", "Terror", "Romance", 18, 4)
     ]
-    SalvarLivros()
 }
 
 function SalvarLivros() {
     fs.writeFileSync("livros.json", JSON.stringify(Livros, null, 2))
 }
 
-// procura o livro pelo título, sem ligar para maiúsculas e minúsculas
 function BuscarLivro(Titulo) {
     let i = 0
     while (i < Livros.length) {
